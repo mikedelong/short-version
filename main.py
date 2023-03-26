@@ -15,10 +15,21 @@ from pandas import set_option
 from transformers import pipeline
 
 
+def read_text(filename: str) -> str:
+    with open(file=filename, encoding='utf-8', mode='r') as input_fp:
+        lines = input_fp.readlines()
+    lines = ' '.join(lines).replace('\n', ' ')
+    return ' '.join(lines.split())
+
+
 DATA_FOLDER = './data/'
 DATE_FORMAT = '%Y-%m-%d %H:%M:%S'
+INPUT_FILE = 'worldwatch2003.txt'
 LOG_FORMAT = '%(asctime)s.%(msecs)03d - %(levelname)s - %(name)s - %(message)s'
 LOG_PATH = Path('./logs/')
+MAX_LENGTH = 30
+MODEL = 't5-base'
+TASK = 'summarization'
 
 if __name__ == '__main__':
     time_start = now()
@@ -36,10 +47,14 @@ if __name__ == '__main__':
     logger = getLogger()
     logger.info('started')
 
-    task = 'sentiment-analysis'
-    model = 'distilbert-base-uncased-finetuned-sst-2-english'
-    classifier = pipeline(model=model, task=task)
-    classifier_result =  classifier('We are very happy to introduce pipeline to the transformers repository.')
-    logger.info(classifier_result)
+    input_file = DATA_FOLDER + INPUT_FILE
+    logger.info('reading input data from %s', input_file)
+    data = read_text(filename=input_file)
+    logger.info(data[:40] + '...')
+    logger.info(len(data.split()))
+    processor = pipeline(max_length=MAX_LENGTH, model=MODEL, task=TASK)
+    result = processor(data)
+    # result =  processor('We are very happy to introduce pipeline to the transformers repository.')
+    logger.info(result[0]['summary_text'])
 
     logger.info('total time: {:5.2f}s'.format((now() - time_start).total_seconds()))
