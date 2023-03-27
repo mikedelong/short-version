@@ -27,8 +27,11 @@ DATE_FORMAT = '%Y-%m-%d %H:%M:%S'
 INPUT_FILE = 'worldwatch2003.txt'
 LOG_FORMAT = '%(asctime)s.%(msecs)03d - %(levelname)s - %(name)s - %(message)s'
 LOG_PATH = Path('./logs/')
-MAX_LENGTH = 30
-MODEL = 't5-base'
+MAX_LENGTH = [56, 30][0]
+MODEL = [
+    'philschmid/bart-large-cnn-samsum',
+    't5-base',
+][0]
 TASK = 'summarization'
 
 if __name__ == '__main__':
