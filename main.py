@@ -54,7 +54,7 @@ if __name__ == '__main__':
     logger.info('reading input data from %s', input_file)
     data = read_text(filename=input_file)
     logger.info(data[:40] + '...')
-    logger.info(len(data.split()))
+    logger.info('input data has %d tokens', len(data.split()))
     processor = pipeline(max_length=MAX_LENGTH, model=MODEL, task=TASK)
     result = processor(data)
     # result =  processor('We are very happy to introduce pipeline to the transformers repository.')
