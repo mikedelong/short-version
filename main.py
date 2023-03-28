@@ -27,8 +27,13 @@ DATE_FORMAT = '%Y-%m-%d %H:%M:%S'
 INPUT_FILE = 'worldwatch2003.txt'
 LOG_FORMAT = '%(asctime)s.%(msecs)03d - %(levelname)s - %(name)s - %(message)s'
 LOG_PATH = Path('./logs/')
-MAX_LENGTH = [56, 30][0]
+MAX_LENGTH = [
+    56,
+    56,
+    30,
+][0]
 MODEL = [
+    'lidiya/bart-large-xsum-samsum',
     'philschmid/bart-large-cnn-samsum',
     't5-base',
 ][0]
