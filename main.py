@@ -24,7 +24,13 @@ def read_text(filename: str) -> str:
 
 DATA_FOLDER = './data/'
 DATE_FORMAT = '%Y-%m-%d %H:%M:%S'
-INPUT_FILE = 'worldwatch2003.txt'
+INPUT_FILE = [
+    'communist-manifesto.txt',
+    'worldwatch2003.txt',
+    ][0]
+INPUT_LENGTH = [
+    2 * 1024 // 3,
+][0]
 LOG_FORMAT = '%(asctime)s.%(msecs)03d - %(levelname)s - %(name)s - %(message)s'
 LOG_PATH = Path('./logs/')
 MAX_LENGTH = [
@@ -60,6 +66,8 @@ if __name__ == '__main__':
     data = read_text(filename=input_file)
     logger.info(data[:40] + '...')
     logger.info('input data has %d tokens', len(data.split()))
+
+    data = ' '.join(data.split()[:INPUT_LENGTH])
     processor = pipeline(max_length=MAX_LENGTH, model=MODEL, task=TASK)
     result = processor(data)
     # result =  processor('We are very happy to introduce pipeline to the transformers repository.')
