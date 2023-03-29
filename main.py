@@ -29,16 +29,19 @@ INPUT_FILE = [
     'worldwatch2003.txt',
     ][0]
 INPUT_LENGTH = [
+    2 * 1024 // 5,
     2 * 1024 // 3,
 ][0]
 LOG_FORMAT = '%(asctime)s.%(msecs)03d - %(levelname)s - %(name)s - %(message)s'
 LOG_PATH = Path('./logs/')
 MAX_LENGTH = [
+    112,
     56,
     56,
     30,
 ][0]
 MODEL = [
+    'google/pegasus-xsum',
     'lidiya/bart-large-xsum-samsum',
     'philschmid/bart-large-cnn-samsum',
     't5-base',
@@ -64,10 +67,11 @@ if __name__ == '__main__':
     input_file = DATA_FOLDER + INPUT_FILE
     logger.info('reading input data from %s', input_file)
     data = read_text(filename=input_file)
-    logger.info(data[:40] + '...')
+    logger.info(data[:100] + '...')
     logger.info('input data has %d tokens', len(data.split()))
 
     data = ' '.join(data.split()[:INPUT_LENGTH])
+    logger.info('after truncation input data has length %d', len(data.split()))
     processor = pipeline(max_length=MAX_LENGTH, model=MODEL, task=TASK)
     result = processor(data)
     # result =  processor('We are very happy to introduce pipeline to the transformers repository.')
