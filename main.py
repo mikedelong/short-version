@@ -29,7 +29,7 @@ INPUT_FILE = [
     'worldwatch2003.txt',
     ][0]
 INPUT_LENGTH = [
-    2 * 1024 // 5,
+    2 * 1024 // 6,
     2 * 1024 // 3,
 ][0]
 LOG_FORMAT = '%(asctime)s.%(msecs)03d - %(levelname)s - %(name)s - %(message)s'
