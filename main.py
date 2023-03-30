@@ -37,17 +37,19 @@ LOG_PATH = Path('./logs/')
 MAX_LENGTH = [
     112,
     112,
+    112,
     56,
     56,
     30,
-][0]
+][1]
 MODEL = [
     'google/pegasus-large',
+    'google/pegasus-pubmed',
     'google/pegasus-xsum',
     'lidiya/bart-large-xsum-samsum',
     'philschmid/bart-large-cnn-samsum',
     't5-base',
-][0]
+][1]
 TASK = 'summarization'
 
 if __name__ == '__main__':
