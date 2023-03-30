@@ -36,11 +36,13 @@ LOG_FORMAT = '%(asctime)s.%(msecs)03d - %(levelname)s - %(name)s - %(message)s'
 LOG_PATH = Path('./logs/')
 MAX_LENGTH = [
     112,
+    112,
     56,
     56,
     30,
 ][0]
 MODEL = [
+    'google/pegasus-large',
     'google/pegasus-xsum',
     'lidiya/bart-large-xsum-samsum',
     'philschmid/bart-large-cnn-samsum',
