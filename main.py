@@ -40,6 +40,7 @@ MAX_LENGTH = [
     30,
 ][0]
 MODEL = [
+    'google/pegasus-cnn_dailymail',
     'google/pegasus-large',
     'google/pegasus-pubmed',
     'google/pegasus-xsum',
