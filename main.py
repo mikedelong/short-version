@@ -36,12 +36,9 @@ LOG_FORMAT = '%(asctime)s.%(msecs)03d - %(levelname)s - %(name)s - %(message)s'
 LOG_PATH = Path('./logs/')
 MAX_LENGTH = [
     112,
-    112,
-    112,
-    56,
     56,
     30,
-][1]
+][0]
 MODEL = [
     'google/pegasus-large',
     'google/pegasus-pubmed',
