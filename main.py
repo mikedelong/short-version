@@ -31,10 +31,11 @@ INPUT_FILE = [
 INPUT_LENGTH = [
     2 * 1024 // 6,
     2 * 1024 // 3,
-][0]
+][1]
 LOG_FORMAT = '%(asctime)s.%(msecs)03d - %(levelname)s - %(name)s - %(message)s'
 LOG_PATH = Path('./logs/')
 MAX_LENGTH = [
+    224,
     112,
     56,
     30,
@@ -72,11 +73,12 @@ if __name__ == '__main__':
     logger.info(data[:100] + '...')
     logger.info('input data has %d tokens', len(data.split()))
 
-    data = ' '.join(data.split()[:INPUT_LENGTH])
-    logger.info('after truncation input data has length %d', len(data.split()))
     processor = pipeline(max_length=MAX_LENGTH, model=MODEL, task=TASK)
-    result = processor(data)
-    # result =  processor('We are very happy to introduce pipeline to the transformers repository.')
-    logger.info(result[0]['summary_text'])
+    for start in range(0, len(data.split()), INPUT_LENGTH):
+        slice = ' '.join(data.split()[start:start+INPUT_LENGTH])
+        logger.info('after truncation input data has length %d', len(slice.split()))
+        result = processor(slice)
+        # result =  processor('We are very happy to introduce pipeline to the transformers repository.')
+        logger.info(result[0]['summary_text'])
 
     logger.info('total time: {:5.2f}s'.format((now() - time_start).total_seconds()))
