@@ -48,7 +48,7 @@ MODEL = [
     'lidiya/bart-large-xsum-samsum',
     'philschmid/bart-large-cnn-samsum',
     't5-base',
-][0]
+][1]
 TASK = 'summarization'
 
 if __name__ == '__main__':
