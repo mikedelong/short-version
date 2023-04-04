@@ -31,7 +31,8 @@ INPUT_FILE = [
 INPUT_LENGTH = [
     2 * 1024 // 6,
     2 * 1024 // 3,
-][1]
+    7 * 1024 // 10,
+][2]
 LOG_FORMAT = '%(asctime)s.%(msecs)03d - %(levelname)s - %(name)s - %(message)s'
 LOG_PATH = Path('./logs/')
 MAX_LENGTH = [
@@ -76,7 +77,7 @@ if __name__ == '__main__':
     processor = pipeline(max_length=MAX_LENGTH, model=MODEL, task=TASK)
     for start in range(0, len(data.split()), INPUT_LENGTH):
         slice = ' '.join(data.split()[start:start+INPUT_LENGTH])
-        logger.info('after truncation input data has length %d', len(slice.split()))
+        logger.info('segment length: %d', len(slice.split()))
         result = processor(slice)
         # result =  processor('We are very happy to introduce pipeline to the transformers repository.')
         logger.info(result[0]['summary_text'])
