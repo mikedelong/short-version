@@ -32,7 +32,8 @@ INPUT_LENGTH = [
     2 * 1024 // 6,
     2 * 1024 // 3,
     7 * 1024 // 10,
-][2]
+    3 * 1024 // 4,
+][3]
 LOG_FORMAT = '%(asctime)s.%(msecs)03d - %(levelname)s - %(name)s - %(message)s'
 LOG_PATH = Path('./logs/')
 MAX_LENGTH = [
