@@ -77,10 +77,10 @@ if __name__ == '__main__':
 
     processor = pipeline(max_length=MAX_LENGTH, model=MODEL, task=TASK)
     for start in range(0, len(data.split()), INPUT_LENGTH):
-        slice = ' '.join(data.split()[start:start+INPUT_LENGTH])
-        logger.info('segment length: %d', len(slice.split()))
-        result = processor(slice)
-        # result =  processor('We are very happy to introduce pipeline to the transformers repository.')
-        logger.info(result[0]['summary_text'])
+        input_slice = ' '.join(data.split()[start:start+INPUT_LENGTH])
+        logger.info('segment length: %d', len(input_slice.split()))
+        result = processor(input_slice)
+        summary_text =  result[0]['summary_text']
+        logger.info('%d tokens: %s', len(summary_text.split()), summary_text)
 
     logger.info('total time: {:5.2f}s'.format((now() - time_start).total_seconds()))
