@@ -30,11 +30,12 @@ INPUT_FILE = [
     ][0]
 INPUT_LENGTH = [
     2 * 1024 // 6,
+    3 * 1024 // 8,
     2 * 1024 // 3,
     7 * 1024 // 10,
     3 * 1024 // 4,
     4 * 1024 // 5,
-][3]
+][1]
 LOG_FORMAT = '%(asctime)s.%(msecs)03d - %(levelname)s - %(name)s - %(message)s'
 LOG_PATH = Path('./logs/')
 MAX_LENGTH = [
@@ -51,7 +52,7 @@ MODEL = [
     'lidiya/bart-large-xsum-samsum',
     'philschmid/bart-large-cnn-samsum',
     't5-base',
-][1]
+][3]
 TASK = 'summarization'
 
 if __name__ == '__main__':
