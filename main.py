@@ -51,8 +51,9 @@ MODEL = [
     'google/pegasus-xsum',
     'lidiya/bart-large-xsum-samsum',
     'philschmid/bart-large-cnn-samsum',
+    'sshleifer/distilbart-cnn-12-6',
     't5-base',
-][3]
+][6]
 TASK = 'summarization'
 
 if __name__ == '__main__':
