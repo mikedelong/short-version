@@ -53,7 +53,7 @@ if __name__ == '__main__':
     manual_seed(seed=SEED)
 
     input_text = 'The quick brown fox jumped over the lazy dog.'
-    result = text_generation(input_text=input_text, arg_model=model, arg_tokenizer=tokenizer)
+    result = text_generation(arg_text=input_text, arg_model=model, arg_tokenizer=tokenizer)
     logger.info(result[0])
 
     logger.info('total time: {:5.2f}s'.format((now() - time_start).total_seconds()))
