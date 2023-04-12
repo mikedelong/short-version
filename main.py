@@ -17,8 +17,8 @@ from transformers import AutoModelForCausalLM
 from transformers import AutoTokenizer
 
 
-def text_generation(input_text, arg_model, arg_tokenizer):
-    outputs = arg_model.generate(arg_tokenizer(input_text, return_tensors='pt').input_ids, do_sample=True,
+def text_generation(arg_text, arg_model, arg_tokenizer):
+    outputs = arg_model.generate(arg_tokenizer(arg_text, return_tensors='pt').input_ids, do_sample=True,
                                  max_length=100)
     return arg_tokenizer.batch_decode(outputs, skip_special_tokens=True)
 
