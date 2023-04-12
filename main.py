@@ -17,10 +17,9 @@ from transformers import AutoModelForCausalLM
 from transformers import AutoTokenizer
 
 
-def text_generation(input_text, seed, arg_model, arg_tokenizer):
-    input_ids = arg_tokenizer(input_text, return_tensors='pt').input_ids
-    manual_seed(seed)  # Max value: 18446744073709551615
-    outputs = arg_model.generate(input_ids, do_sample=True, max_length=100)
+def text_generation(input_text, arg_model, arg_tokenizer):
+    outputs = arg_model.generate(arg_tokenizer(input_text, return_tensors='pt').input_ids, do_sample=True,
+                                 max_length=100)
     return arg_tokenizer.batch_decode(outputs, skip_special_tokens=True)
 
 
@@ -31,6 +30,7 @@ LOG_PATH = Path('./logs/')
 MODEL = [
     'gpt2',
 ][0]
+SEED = 1
 
 if __name__ == '__main__':
     time_start = now()
@@ -50,10 +50,10 @@ if __name__ == '__main__':
 
     tokenizer = AutoTokenizer.from_pretrained(MODEL)
     model = AutoModelForCausalLM.from_pretrained(MODEL)
+    manual_seed(seed=SEED)
 
     input_text = 'The quick brown fox jumped over the lazy dog.'
-    seed = 1
-    result = text_generation(input_text=input_text, seed=seed, arg_model=model, arg_tokenizer=tokenizer)
+    result = text_generation(input_text=input_text, arg_model=model, arg_tokenizer=tokenizer)
     logger.info(result[0])
 
     logger.info('total time: {:5.2f}s'.format((now() - time_start).total_seconds()))
