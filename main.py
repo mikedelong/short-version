@@ -12,22 +12,26 @@ from sys import stdout
 
 from arrow import now
 from pandas import set_option
+from torch import manual_seed
+from transformers import AutoModelForCausalLM
+from transformers import AutoTokenizer
+
+
+def text_generation(input_text, seed):
+    input_ids = tokenizer(input_text, return_tensors="pt").input_ids
+    manual_seed(seed)  # Max value: 18446744073709551615
+    outputs = model.generate(input_ids, do_sample=True, max_length=100)
+    generated_text = tokenizer.batch_decode(outputs, skip_special_tokens=True)
+    return generated_text
+
 
 DATA_FOLDER = './data/'
 DATE_FORMAT = '%Y-%m-%d %H:%M:%S'
 LOG_FORMAT = '%(asctime)s.%(msecs)03d - %(levelname)s - %(name)s - %(message)s'
 LOG_PATH = Path('./logs/')
 MODEL = [
-    'google/pegasus-cnn_dailymail',
-    'google/pegasus-large',
-    'google/pegasus-pubmed',
-    'google/pegasus-xsum',
-    'lidiya/bart-large-xsum-samsum',
-    'philschmid/bart-large-cnn-samsum',
-    'sshleifer/distilbart-cnn-12-6',
-    't5-base',
-][6]
-TASK = 'summarization'
+    'gpt2',
+][0]
 
 if __name__ == '__main__':
     time_start = now()
@@ -44,5 +48,8 @@ if __name__ == '__main__':
 
     logger = getLogger()
     logger.info('started')
+
+    tokenizer = AutoTokenizer.from_pretrained(MODEL)
+    model = AutoModelForCausalLM.from_pretrained(MODEL)
 
     logger.info('total time: {:5.2f}s'.format((now() - time_start).total_seconds()))
