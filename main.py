@@ -48,12 +48,14 @@ if __name__ == '__main__':
     logger = getLogger()
     logger.info('started')
 
-    tokenizer = AutoTokenizer.from_pretrained(MODEL)
-    model = AutoModelForCausalLM.from_pretrained(MODEL)
-    manual_seed(seed=SEED)
-
     input_text = 'The quick brown fox jumped over the lazy dog.'
-    result = text_generation(arg_text=input_text, arg_model=model, arg_tokenizer=tokenizer)
-    logger.info(result[0])
+    model = AutoModelForCausalLM.from_pretrained(MODEL)
+    tokenizer = AutoTokenizer.from_pretrained(MODEL)
+
+
+    for seed in range(10):
+        manual_seed(seed=seed)
+        result = text_generation(arg_text=input_text, arg_model=model, arg_tokenizer=tokenizer)[0]
+        logger.info('seed: %d result: %s', seed, result.replace('\n', ' '))
 
     logger.info('total time: {:5.2f}s'.format((now() - time_start).total_seconds()))
