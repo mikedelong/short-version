@@ -33,7 +33,6 @@ LOG_PATH = Path('./logs/')
 MODEL = [
     'gpt2',
 ][0]
-SEED = 1
 
 if __name__ == '__main__':
     time_start = now()
@@ -58,6 +57,9 @@ if __name__ == '__main__':
     for seed in range(10):
         manual_seed(seed=seed)
         result = text_generation(arg_text=input_text, arg_model=model, arg_tokenizer=tokenizer)[0]
-        logger.info('seed: %d result: %s', seed, result.replace('\n', ' '))
+        result = result.replace('\n', ' ')
+        result = result.replace(input_text, '')
+        result = ' '.join(result.split())
+        logger.info('seed: %d result: %s', seed, result)
 
     logger.info('total time: {:5.2f}s'.format((now() - time_start).total_seconds()))
