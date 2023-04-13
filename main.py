@@ -18,8 +18,11 @@ from transformers import AutoTokenizer
 
 
 def text_generation(arg_text, arg_model, arg_tokenizer):
-    outputs = arg_model.generate(arg_tokenizer(arg_text, return_tensors='pt').input_ids, do_sample=True,
-                                 max_length=100)
+    outputs = arg_model.generate(
+        arg_tokenizer(arg_text, return_tensors='pt').input_ids,
+        do_sample=True,
+        max_length=100,
+        pad_token_id=arg_tokenizer.eos_token_id, )
     return arg_tokenizer.batch_decode(outputs, skip_special_tokens=True)
 
 
@@ -51,7 +54,6 @@ if __name__ == '__main__':
     input_text = 'The quick brown fox jumped over the lazy dog.'
     model = AutoModelForCausalLM.from_pretrained(MODEL)
     tokenizer = AutoTokenizer.from_pretrained(MODEL)
-
 
     for seed in range(10):
         manual_seed(seed=seed)
