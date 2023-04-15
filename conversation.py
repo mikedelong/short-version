@@ -31,8 +31,9 @@ DATE_FORMAT = '%Y-%m-%d %H:%M:%S'
 LOG_FORMAT = '%(asctime)s.%(msecs)03d - %(levelname)s - %(name)s - %(message)s'
 LOG_PATH = Path('./logs/')
 MODEL = [
-    'EleutherAI/gpt-j-6B'
-][0]
+    'EleutherAI/gpt-j-6B',
+    'microsoft/DialoGPT-small',
+][1]
 
 if __name__ == '__main__':
     time_start = now()
@@ -50,7 +51,7 @@ if __name__ == '__main__':
     logger = getLogger()
     logger.info('started')
 
-    input_text = 'And in the end of course you end up becoming'
+    input_text = 'Although of course you end up becoming'
     logger.info('input text: %s', input_text)
     model = AutoModelForCausalLM.from_pretrained(MODEL)
     logger.info('loaded model')
