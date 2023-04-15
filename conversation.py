@@ -51,8 +51,11 @@ if __name__ == '__main__':
     logger.info('started')
 
     input_text = 'And in the end of course you end up becoming'
+    logger.info('input text: %s', input_text)
     model = AutoModelForCausalLM.from_pretrained(MODEL)
+    logger.info('loaded model')
     tokenizer = AutoTokenizer.from_pretrained(MODEL)
+    logger.info('built tokenizer')
 
     for seed in range(10):
         manual_seed(seed=seed)
