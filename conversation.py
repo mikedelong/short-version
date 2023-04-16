@@ -34,6 +34,7 @@ MODEL = [
     'EleutherAI/gpt-j-6B',
     'microsoft/DialoGPT-small',
 ][1]
+REPS = 20
 
 if __name__ == '__main__':
     time_start = now()
@@ -58,12 +59,15 @@ if __name__ == '__main__':
     tokenizer = AutoTokenizer.from_pretrained(MODEL)
     logger.info('built tokenizer')
 
-    for seed in range(10):
+    results = set()
+    for seed in range(REPS):
         manual_seed(seed=seed)
         result = text_generation(arg_text=input_text, arg_model=model, arg_tokenizer=tokenizer)[0]
         result = result.replace('\n', ' ')
         result = result.replace(input_text, '')
         result = ' '.join(result.split())
-        logger.info('seed: %d result: %s', seed, result)
+        if result not in results:
+            logger.info('seed: %d result: %s', seed, result)
+            results.update(result)
 
     logger.info('total time: {:5.2f}s'.format((now() - time_start).total_seconds()))
