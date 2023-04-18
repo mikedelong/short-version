@@ -1,6 +1,3 @@
 from gradio import Interface
 
-def greet(name: str):
-    return 'Hello {}.'.format(name)
-
-Interface(fn=greet, inputs='text', outputs='text').launch()
+Interface(fn=lambda x: 'Hello {}.'.format(x), inputs='text', outputs='text').launch()
