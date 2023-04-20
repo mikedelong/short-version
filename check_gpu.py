@@ -12,6 +12,7 @@ from sys import stdout
 
 from arrow import now
 from pandas import set_option
+from torch.cuda import is_available
 
 DATA_FOLDER = './data/'
 DATE_FORMAT = '%Y-%m-%d %H:%M:%S'
@@ -33,5 +34,6 @@ if __name__ == '__main__':
 
     logger = getLogger()
     logger.info('started')
+    logger.info('CUDA available: %s', is_available())
 
     logger.info('total time: {:5.2f}s'.format((now() - time_start).total_seconds()))
