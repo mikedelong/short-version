@@ -45,8 +45,8 @@ if __name__ == '__main__':
     tokenizer = T5Tokenizer.from_pretrained(pretrained_model_name_or_path=MODEL_NAME)
     model = T5ForConditionalGeneration.from_pretrained(pretrained_model_name_or_path=MODEL_NAME)
     logger.info('input: %s', INPUT_TEXT)
-    token_ids = tokenizer(text=INPUT_TEXT, max_length=MAX_LENGTH, return_tensors='pt', truncation=True, ).input_ids
-    output_ids = model.generate(token_ids, max_length=MAX_LENGTH, )
+    token_ids = tokenizer(max_length=MAX_LENGTH, return_tensors='pt', text=INPUT_TEXT, truncation=True, ).input_ids
+    output_ids = model.generate(input_ids=token_ids, max_length=MAX_LENGTH, )
     output = tokenizer.decode(token_ids=output_ids[0], ).replace('<pad> ', '').replace('</s>', '')
     logger.info('output: %s', output)
 
