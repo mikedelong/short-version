@@ -44,6 +44,7 @@ if __name__ == '__main__':
     logger = getLogger()
     logger.info('model: %s', MODEL_NAME)
     input_file = DATA_FOLDER + INPUT_FILE
+    logger.info('input file: %s', input_file)
     with open(file = input_file, encoding=ENCODING, mode=MODE_READ) as input_fp:
         text = input_fp.readlines()
     text = ' '.join(text)
