@@ -24,7 +24,7 @@ LOG_PATH = Path('./logs/')
 MAX_LENGTH = 300
 MODEL_NAME = 'google/pegasus-xsum'
 SIZES = {
-    'google/pegasus-xsum': '0'
+    'google/pegasus-xsum': '2.28Gb'
 }
 TEXT = """
 For centuries, humans have believed that plants are simply objects, without any feelings or emotions. However, in recent years, scientists have begun to discover that plants are much more complex than we once thought. They can communicate with each other, they can learn and adapt, and they may even be able to feel pain.
@@ -49,6 +49,14 @@ if __name__ == '__main__':
     logger = getLogger()
     logger.info('model: %s', MODEL_NAME)
     tokenizer = PegasusTokenizer.from_pretrained(pretrained_model_name_or_path=MODEL_NAME)
+    logger.info('loaded pretrained tokenizer.')
+    tokens = tokenizer(text=TEXT, truncation=True, padding='longest', return_tensors='pt')
+    model = PegasusForConditionalGeneration.from_pretrained(pretrained_model_name_or_path=MODEL_NAME)
+    logger.info('loaded pretrained model.')
+    summary = model.generate(**tokens)
+    logger.info('got summary.')
+    logger.info('summary: %s', tokenizer.decode(token_ids=summary[0], skip_special_tokens=True))
+
 
 
     logger.info('total time: {:5.2f}s'.format((now() - time_start).total_seconds()))
