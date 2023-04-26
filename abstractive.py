@@ -2,6 +2,7 @@
 Abstractive text summarization demo
 """
 
+from glob import glob
 from logging import FileHandler
 from logging import INFO
 from logging import StreamHandler
@@ -14,7 +15,6 @@ from arrow import now
 from pandas import set_option
 from transformers import PegasusForConditionalGeneration
 from transformers import PegasusTokenizer
-from glob import glob
 
 DATA_FOLDER = './data/'
 DATE_FORMAT = '%Y-%m-%d %H:%M:%S'
@@ -49,12 +49,12 @@ if __name__ == '__main__':
     logger.info('loaded pretrained tokenizer.')
     for input_file in glob(DATA_FOLDER + '*.txt'):
         logger.info('input file: %s', input_file)
-        with open(file = input_file, encoding=ENCODING, mode=MODE_READ) as input_fp:
+        with open(file=input_file, encoding=ENCODING, mode=MODE_READ) as input_fp:
             text = input_fp.readlines()
         text = ' '.join(text)
         logger.info('text length: %d text start: %s...', len(text), text[:40].replace('\n', ''))
         tokens = tokenizer(text=text, truncation=True, padding='longest', return_tensors='pt')
-        summary = model.generate(**tokens, max_length=MAX_LENGTH,)
+        summary = model.generate(**tokens, max_length=MAX_LENGTH, )
         logger.info('summary: %s', tokenizer.decode(token_ids=summary[0], skip_special_tokens=True))
 
     logger.info('total time: {:5.2f}s'.format((now() - time_start).total_seconds()))
