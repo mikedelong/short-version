@@ -12,7 +12,6 @@ from sys import stdout
 
 from arrow import now
 from pandas import set_option
-from transformers import pipeline
 from transformers import PegasusForConditionalGeneration
 from transformers import PegasusTokenizer
 
@@ -56,7 +55,5 @@ if __name__ == '__main__':
     summary = model.generate(**tokens)
     logger.info('got summary.')
     logger.info('summary: %s', tokenizer.decode(token_ids=summary[0], skip_special_tokens=True))
-
-
 
     logger.info('total time: {:5.2f}s'.format((now() - time_start).total_seconds()))
