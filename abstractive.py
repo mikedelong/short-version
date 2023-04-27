@@ -25,9 +25,11 @@ LOG_PATH = Path('./logs/')
 MAX_LENGTH = 300
 MODE_READ = 'r'
 MODEL_NAMES = [
+    'google/pegasus-pubmed',
     'google/pegasus-xsum',
-    ]
+]
 SIZES = {
+    'google/pegasus-pubmed': '2.28Gb',
     'google/pegasus-xsum': '2.28Gb'
 }
 
@@ -58,6 +60,7 @@ if __name__ == '__main__':
             logger.info('text length: %d text start: %s...', len(text), text[:40].replace('\n', ''))
             tokens = tokenizer(text=text, truncation=True, padding='longest', return_tensors='pt')
             summary = model.generate(**tokens, max_length=MAX_LENGTH, )
-            logger.info('summary: %s', tokenizer.decode(token_ids=summary[0], skip_special_tokens=True))
+            summary_text = tokenizer.decode(token_ids=summary[0], skip_special_tokens=True)
+            logger.info('summary length: %d summary text: %s', len(summary_text), summary_text)
 
     logger.info('total time: {:5.2f}s'.format((now() - time_start).total_seconds()))
