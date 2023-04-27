@@ -46,21 +46,39 @@ if __name__ == '__main__':
     basicConfig(datefmt=DATE_FORMAT, format=LOG_FORMAT, handlers=handlers, level=INFO, )
 
     logger = getLogger()
-    for model_name in MODEL_NAMES:
-        logger.info('model: %s', model_name)
-        model = PegasusForConditionalGeneration.from_pretrained(pretrained_model_name_or_path=model_name)
-        logger.info('loaded pretrained model.')
-        tokenizer = PegasusTokenizer.from_pretrained(pretrained_model_name_or_path=model_name)
-        logger.info('loaded pretrained tokenizer.')
+
+    original_run_order = True
+    if original_run_order:
+            for model_name in MODEL_NAMES:
+                logger.info('model: %s', model_name)
+                model = PegasusForConditionalGeneration.from_pretrained(pretrained_model_name_or_path=model_name)
+                logger.info('loaded pretrained model.')
+                tokenizer = PegasusTokenizer.from_pretrained(pretrained_model_name_or_path=model_name)
+                logger.info('loaded pretrained tokenizer.')
+                for input_file in glob(DATA_FOLDER + '*.txt'):
+                    logger.info('input file: %s', input_file)
+                    with open(file=input_file, encoding=ENCODING, mode=MODE_READ) as input_fp:
+                        text = input_fp.readlines()
+                    text = ' '.join(text)
+                    logger.info('text length: %d text start: %s...', len(text), text[:40].replace('\n', ''))
+                    tokens = tokenizer(text=text, truncation=True, padding='longest', return_tensors='pt')
+                    summary = model.generate(**tokens, max_length=MAX_LENGTH, )
+                    summary_text = tokenizer.decode(token_ids=summary[0], skip_special_tokens=True)
+                    logger.info('summary length: %d summary text: %s', len(summary_text), summary_text)
+    else:
         for input_file in glob(DATA_FOLDER + '*.txt'):
             logger.info('input file: %s', input_file)
             with open(file=input_file, encoding=ENCODING, mode=MODE_READ) as input_fp:
                 text = input_fp.readlines()
             text = ' '.join(text)
             logger.info('text length: %d text start: %s...', len(text), text[:40].replace('\n', ''))
-            tokens = tokenizer(text=text, truncation=True, padding='longest', return_tensors='pt')
-            summary = model.generate(**tokens, max_length=MAX_LENGTH, )
-            summary_text = tokenizer.decode(token_ids=summary[0], skip_special_tokens=True)
-            logger.info('summary length: %d summary text: %s', len(summary_text), summary_text)
+            for model_name in MODEL_NAMES:
+                logger.info('model: %s', model_name)
+                model = PegasusForConditionalGeneration.from_pretrained(pretrained_model_name_or_path=model_name)
+                tokenizer = PegasusTokenizer.from_pretrained(pretrained_model_name_or_path=model_name)
+                tokens = tokenizer(text=text, truncation=True, padding='longest', return_tensors='pt')
+                summary = model.generate(**tokens, max_length=MAX_LENGTH, )
+                summary_text = tokenizer.decode(token_ids=summary[0], skip_special_tokens=True)
+                logger.info('summary length: %d summary text: %s', len(summary_text), summary_text)
 
     logger.info('total time: {:5.2f}s'.format((now() - time_start).total_seconds()))
