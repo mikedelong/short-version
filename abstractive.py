@@ -28,6 +28,7 @@ MODEL_NAMES = [
     'google/pegasus-pubmed',
     'google/pegasus-xsum',
 ]
+RESULT_FOLDER = './results/'
 SIZES = {
     'google/pegasus-pubmed': '2.28Gb',
     'google/pegasus-xsum': '2.28Gb'
@@ -36,6 +37,8 @@ SIZES = {
 if __name__ == '__main__':
     time_start = now()
     LOG_PATH.mkdir(exist_ok=True)
+    Path(DATA_FOLDER).mkdir(exist_ok=True)
+    Path(RESULT_FOLDER).mkdir(exist_ok=True)
 
     set_option('display.max_colwidth', None)  # was -1 and caused a warning
     run_start_time = now().strftime('%Y-%m-%d_%H-%M-%S')
