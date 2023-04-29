@@ -24,15 +24,13 @@ LOG_FORMAT = '%(asctime)s.%(msecs)03d - %(levelname)s - %(name)s - %(message)s'
 LOG_PATH = Path('./logs/')
 MAX_LENGTH = 300
 MODE_READ = 'r'
+# all the pegasus models are 2.28Gb
 MODEL_NAMES = [
+    'google/pegasus-newsroom',
     'google/pegasus-pubmed',
     'google/pegasus-xsum',
 ]
 RESULT_FOLDER = './results/'
-SIZES = {
-    'google/pegasus-pubmed': '2.28Gb',
-    'google/pegasus-xsum': '2.28Gb'
-}
 
 if __name__ == '__main__':
     time_start = now()
@@ -49,6 +47,10 @@ if __name__ == '__main__':
     basicConfig(datefmt=DATE_FORMAT, format=LOG_FORMAT, handlers=handlers, level=INFO, )
 
     logger = getLogger()
+
+    model_names = list()
+    file_names = list()
+    summaries = list()
 
     original_run_order = True
     if original_run_order:
@@ -68,6 +70,9 @@ if __name__ == '__main__':
                     summary = model.generate(**tokens, max_length=MAX_LENGTH, )
                     summary_text = tokenizer.decode(token_ids=summary[0], skip_special_tokens=True)
                     logger.info('summary length: %d summary text: %s', len(summary_text), summary_text)
+                    model_names.append(model_name)
+                    file_names.append(input_file)
+                    summaries.append(summary_text)
     else:
         for input_file in glob(DATA_FOLDER + '*.txt'):
             logger.info('input file: %s', input_file)
