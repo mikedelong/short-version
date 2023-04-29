@@ -32,6 +32,7 @@ MODEL_NAMES = [
     'google/pegasus-xsum',
 ]
 RESULT_FOLDER = './results/'
+RESULT_FILE = 'abstractive.csv'
 
 if __name__ == '__main__':
     time_start = now()
@@ -72,5 +73,9 @@ if __name__ == '__main__':
             model_names.append(model_name)
             file_names.append(input_file)
             summaries.append(summary_text)
+            result_df = DataFrame(data={'model': model_names, 'file': file_names, 'summary': summaries})
+            result_filename = RESULT_FOLDER + RESULT_FILE
+            logger.info('writing: %s', result_filename)
+            result_df.to_csv(index=False, path_or_buf=result_filename, )
 
     logger.info('total time: {:5.2f}s'.format((now() - time_start).total_seconds()))
