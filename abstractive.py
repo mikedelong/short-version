@@ -54,10 +54,12 @@ if __name__ == '__main__':
     logger = getLogger()
 
     prior_filename = RESULT_FOLDER + RESULT_FILE
+    # TODO check to see if this file exists and do the right thing
     logger.info('reading prior results from %s', prior_filename)
     prior_df = read_csv(filepath_or_buffer=prior_filename)
     logger.info('read %d results from %s', len(prior_df), prior_filename)
 
+    # TODO only generate cases we haven't already generated
     input_files = list(glob(DATA_FOLDER + '*.txt'))
     for model_name in MODEL_NAMES:
         logger.info('model: %s', model_name)
@@ -80,6 +82,7 @@ if __name__ == '__main__':
             OUTPUT_SUMMARIES.append(summary_text)
             result_filename = RESULT_FOLDER + RESULT_FILE
             logger.info('writing: %s', result_filename)
+            # TODO concat the results and write the updated results
             DataFrame(
                 data={'model': OUTPUT_MODEL_NAMES, 'file': OUTPUT_FILE_NAMES, 'summary': OUTPUT_SUMMARIES}).to_csv(
                 index=False, path_or_buf=result_filename, )
