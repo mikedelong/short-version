@@ -16,6 +16,7 @@ from pandas import set_option
 from transformers import PegasusForConditionalGeneration
 from transformers import PegasusTokenizer
 from pandas import DataFrame
+from pandas import read_csv
 
 DATA_FOLDER = './data/'
 DATE_FORMAT = '%Y-%m-%d %H:%M:%S'
@@ -51,6 +52,11 @@ if __name__ == '__main__':
     # noinspection PyArgumentList
     basicConfig(datefmt=DATE_FORMAT, format=LOG_FORMAT, handlers=handlers, level=INFO, )
     logger = getLogger()
+
+    prior_filename = RESULT_FOLDER + RESULT_FILE
+    logger.info('reading prior results from %s', prior_filename)
+    prior_df = read_csv(filepath_or_buffer=prior_filename)
+    logger.info('read %d results from %s', len(prior_df), prior_filename)
 
     input_files = list(glob(DATA_FOLDER + '*.txt'))
     for model_name in MODEL_NAMES:
