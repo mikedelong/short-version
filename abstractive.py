@@ -52,13 +52,14 @@ if __name__ == '__main__':
     basicConfig(datefmt=DATE_FORMAT, format=LOG_FORMAT, handlers=handlers, level=INFO, )
     logger = getLogger()
 
+    input_files = list(glob(DATA_FOLDER + '*.txt'))
     for model_name in MODEL_NAMES:
         logger.info('model: %s', model_name)
         model = PegasusForConditionalGeneration.from_pretrained(pretrained_model_name_or_path=model_name)
         logger.info('loaded pretrained model.')
         tokenizer = PegasusTokenizer.from_pretrained(pretrained_model_name_or_path=model_name)
         logger.info('loaded pretrained tokenizer.')
-        for input_file in glob(DATA_FOLDER + '*.txt'):
+        for input_file in input_files:
             logger.info('input file: %s', input_file)
             with open(file=input_file, encoding=ENCODING, mode=MODE_READ) as input_fp:
                 text = input_fp.readlines()
