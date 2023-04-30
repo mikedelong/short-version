@@ -12,11 +12,11 @@ from pathlib import Path
 from sys import stdout
 
 from arrow import now
+from pandas import DataFrame
+from pandas import read_csv
 from pandas import set_option
 from transformers import PegasusForConditionalGeneration
 from transformers import PegasusTokenizer
-from pandas import DataFrame
-from pandas import read_csv
 
 DATA_FOLDER = './data/'
 DATE_FORMAT = '%Y-%m-%d %H:%M:%S'
