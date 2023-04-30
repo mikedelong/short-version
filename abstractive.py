@@ -31,6 +31,9 @@ MODEL_NAMES = [
     'google/pegasus-pubmed',
     'google/pegasus-xsum',
 ]
+OUTPUT_FILE_NAMES = list()
+OUTPUT_MODEL_NAMES = list()
+OUTPUT_SUMMARIES = list()
 RESULT_FOLDER = './results/'
 RESULT_FILE = 'abstractive.csv'
 
@@ -47,12 +50,7 @@ if __name__ == '__main__':
     handlers = [FileHandler(LOGFILE), StreamHandler(stdout)]
     # noinspection PyArgumentList
     basicConfig(datefmt=DATE_FORMAT, format=LOG_FORMAT, handlers=handlers, level=INFO, )
-
     logger = getLogger()
-
-    model_names = list()
-    file_names = list()
-    summaries = list()
 
     for model_name in MODEL_NAMES:
         logger.info('model: %s', model_name)
@@ -70,12 +68,13 @@ if __name__ == '__main__':
             summary = model.generate(**tokens, max_length=MAX_LENGTH, )
             summary_text = tokenizer.decode(token_ids=summary[0], skip_special_tokens=True)
             logger.info('summary length: %d summary text: %s', len(summary_text), summary_text)
-            model_names.append(model_name)
-            file_names.append(input_file)
-            summaries.append(summary_text)
-            result_df = DataFrame(data={'model': model_names, 'file': file_names, 'summary': summaries})
+            OUTPUT_MODEL_NAMES.append(model_name)
+            OUTPUT_FILE_NAMES.append(input_file)
+            OUTPUT_SUMMARIES.append(summary_text)
             result_filename = RESULT_FOLDER + RESULT_FILE
             logger.info('writing: %s', result_filename)
-            result_df.to_csv(index=False, path_or_buf=result_filename, )
+            DataFrame(
+                data={'model': OUTPUT_MODEL_NAMES, 'file': OUTPUT_FILE_NAMES, 'summary': OUTPUT_SUMMARIES}).to_csv(
+                index=False, path_or_buf=result_filename, )
 
     logger.info('total time: {:5.2f}s'.format((now() - time_start).total_seconds()))
