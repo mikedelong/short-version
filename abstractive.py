@@ -86,8 +86,7 @@ if __name__ == '__main__':
             result_filename = RESULT_FOLDER + RESULT_FILE
             logger.info('writing: %s', result_filename)
             # TODO concat the results and write the updated results
-            DataFrame(
-                data={'model': OUTPUT_MODEL_NAMES, 'file': OUTPUT_FILE_NAMES, 'summary': OUTPUT_SUMMARIES}).to_csv(
-                index=False, path_or_buf=result_filename, )
+            result_df = DataFrame(data={'model': OUTPUT_MODEL_NAMES, 'file': OUTPUT_FILE_NAMES, 'summary': OUTPUT_SUMMARIES})
+            result_df.to_csv(index=False, path_or_buf=result_filename, )
 
     logger.info('total time: {:5.2f}s'.format((now() - time_start).total_seconds()))
