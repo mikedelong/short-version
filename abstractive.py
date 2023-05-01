@@ -8,6 +8,7 @@ from logging import INFO
 from logging import StreamHandler
 from logging import basicConfig
 from logging import getLogger
+from os.path import exists
 from pathlib import Path
 from sys import stdout
 
@@ -54,10 +55,12 @@ if __name__ == '__main__':
     logger = getLogger()
 
     prior_filename = RESULT_FOLDER + RESULT_FILE
-    # TODO check to see if this file exists and do the right thing
-    logger.info('reading prior results from %s', prior_filename)
-    prior_df = read_csv(filepath_or_buffer=prior_filename)
-    logger.info('read %d results from %s', len(prior_df), prior_filename)
+    if exists(path=prior_filename):
+        logger.info('reading prior results from %s', prior_filename)
+        prior_df = read_csv(filepath_or_buffer=prior_filename)
+        logger.info('read %d results from %s', len(prior_df), prior_filename)
+    else:
+        prior_df = DataFrame(columns=['model', 'file', 'summary', ])
 
     # TODO only generate cases we haven't already generated
     input_files = list(glob(DATA_FOLDER + '*.txt'))
