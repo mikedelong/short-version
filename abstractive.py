@@ -69,6 +69,7 @@ if __name__ == '__main__':
     for model_name in MODEL_NAMES:
         model_df = prior_df[prior_df['model'] == model_name]
         files = model_df['file'].values
+        # TODO refactor this
         done_files = {name for name in files if name in input_files}
         done = len(input_files) == len(done_files)
         if not done:
@@ -77,6 +78,7 @@ if __name__ == '__main__':
             logger.info('loaded pretrained model.')
             tokenizer = PegasusTokenizer.from_pretrained(pretrained_model_name_or_path=model_name)
             logger.info('loaded pretrained tokenizer.')
+            # TODO only do the cases we haven't already done
             for input_file in input_files:
                 logger.info('input file: %s', input_file)
                 with open(file=input_file, encoding=ENCODING, mode=MODE_READ) as input_fp:
