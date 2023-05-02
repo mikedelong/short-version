@@ -71,7 +71,7 @@ if __name__ == '__main__':
         files = model_df['file'].values
         # TODO refactor this
         not_done_files = {name for name in input_files if name not in files}
-        if len(not_done_files) > 0:
+        if len(not_done_files):
             logger.info('model: %s', model_name)
             model = PegasusForConditionalGeneration.from_pretrained(pretrained_model_name_or_path=model_name)
             logger.info('loaded pretrained model.')
