@@ -30,6 +30,7 @@ LOG_PATH = Path('./logs/')
 MAX_LENGTH = 300
 MODE_READ = 'r'
 # all the pegasus models are 2.28Gb
+# TODO move the model list from code to data
 MODEL_NAMES = [
     'google/pegasus-arxiv',
     'google/pegasus-newsroom',
