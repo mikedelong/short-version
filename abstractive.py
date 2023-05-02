@@ -64,11 +64,9 @@ if __name__ == '__main__':
     else:
         prior_df = DataFrame(columns=['model', 'file', 'summary', ])
 
-    # TODO only generate cases we haven't already generated
     input_files = list(glob(DATA_FOLDER + '*.txt'))
     for model_name in MODEL_NAMES:
         model_df = prior_df[prior_df['model'] == model_name]
-        # TODO refactor this
         not_done_files = {name for name in input_files if name not in model_df['file'].values}
         if len(not_done_files):
             logger.info('model: %s', model_name)
@@ -76,7 +74,6 @@ if __name__ == '__main__':
             logger.info('loaded pretrained model.')
             tokenizer = PegasusTokenizer.from_pretrained(pretrained_model_name_or_path=model_name)
             logger.info('loaded pretrained tokenizer.')
-            # TODO only do the cases we haven't already done
             for input_file in not_done_files:
                 logger.info('input file: %s', input_file)
                 with open(file=input_file, encoding=ENCODING, mode=MODE_READ) as input_fp:
@@ -91,11 +88,10 @@ if __name__ == '__main__':
                 OUTPUT_FILE_NAMES.append(input_file)
                 OUTPUT_SUMMARIES.append(summary_text)
                 result_filename = RESULT_FOLDER + RESULT_FILE
-                logger.info('writing: %s', result_filename)
-                # TODO concat the results and write the updated results
                 result_df = DataFrame(
                     data={'model': OUTPUT_MODEL_NAMES, 'file': OUTPUT_FILE_NAMES, 'summary': OUTPUT_SUMMARIES})
                 result_df = concat([prior_df, result_df])
+                logger.info('writing: %d rows to %s', len(result_df), result_filename)
                 result_df.to_csv(index=False, path_or_buf=result_filename, )
 
     logger.info('total time: {:5.2f}s'.format((now() - time_start).total_seconds()))
