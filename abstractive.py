@@ -68,9 +68,8 @@ if __name__ == '__main__':
     input_files = list(glob(DATA_FOLDER + '*.txt'))
     for model_name in MODEL_NAMES:
         model_df = prior_df[prior_df['model'] == model_name]
-        files = model_df['file'].values
         # TODO refactor this
-        not_done_files = {name for name in input_files if name not in files}
+        not_done_files = {name for name in input_files if name not in model_df['file'].values}
         if len(not_done_files):
             logger.info('model: %s', model_name)
             model = PegasusForConditionalGeneration.from_pretrained(pretrained_model_name_or_path=model_name)
