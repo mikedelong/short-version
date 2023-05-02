@@ -70,16 +70,15 @@ if __name__ == '__main__':
         model_df = prior_df[prior_df['model'] == model_name]
         files = model_df['file'].values
         # TODO refactor this
-        done_files = {name for name in files if name in input_files}
-        done = len(input_files) == len(done_files)
-        if not done:
+        not_done_files = {name for name in input_files if name not in files}
+        if len(not_done_files) > 0:
             logger.info('model: %s', model_name)
             model = PegasusForConditionalGeneration.from_pretrained(pretrained_model_name_or_path=model_name)
             logger.info('loaded pretrained model.')
             tokenizer = PegasusTokenizer.from_pretrained(pretrained_model_name_or_path=model_name)
             logger.info('loaded pretrained tokenizer.')
             # TODO only do the cases we haven't already done
-            for input_file in input_files:
+            for input_file in not_done_files:
                 logger.info('input file: %s', input_file)
                 with open(file=input_file, encoding=ENCODING, mode=MODE_READ) as input_fp:
                     text = input_fp.readlines()
@@ -95,7 +94,8 @@ if __name__ == '__main__':
                 result_filename = RESULT_FOLDER + RESULT_FILE
                 logger.info('writing: %s', result_filename)
                 # TODO concat the results and write the updated results
-                result_df = DataFrame(data={'model': OUTPUT_MODEL_NAMES, 'file': OUTPUT_FILE_NAMES, 'summary': OUTPUT_SUMMARIES})
+                result_df = DataFrame(
+                    data={'model': OUTPUT_MODEL_NAMES, 'file': OUTPUT_FILE_NAMES, 'summary': OUTPUT_SUMMARIES})
                 result_df = concat([prior_df, result_df])
                 result_df.to_csv(index=False, path_or_buf=result_filename, )
 
