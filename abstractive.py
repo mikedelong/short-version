@@ -1,5 +1,6 @@
 """
 Abstractive text summarization demo
+All the pegasus models are 2.28Gb
 """
 
 from glob import glob
@@ -20,6 +21,7 @@ from transformers import PegasusForConditionalGeneration
 from transformers import PegasusTokenizer
 
 from pandas import concat
+from json import load
 
 DATA_FOLDER = './data/'
 DATE_FORMAT = '%Y-%m-%d %H:%M:%S'
@@ -29,19 +31,14 @@ LOG_FORMAT = '%(asctime)s.%(msecs)03d - %(levelname)s - %(name)s - %(message)s'
 LOG_PATH = Path('./logs/')
 MAX_LENGTH = 300
 MODE_READ = 'r'
-# all the pegasus models are 2.28Gb
-# TODO move the model list from code to data
-MODEL_NAMES = [
-    'google/pegasus-arxiv',
-    'google/pegasus-newsroom',
-    'google/pegasus-pubmed',
-    'google/pegasus-xsum',
-]
+
+
 OUTPUT_FILE_NAMES = list()
 OUTPUT_MODEL_NAMES = list()
 OUTPUT_SUMMARIES = list()
 RESULT_FOLDER = './results/'
 RESULT_FILE = 'abstractive.csv'
+SETTINGS_FILE = './abstractive.json'
 
 if __name__ == '__main__':
     time_start = now()
@@ -57,6 +54,10 @@ if __name__ == '__main__':
     # noinspection PyArgumentList
     basicConfig(datefmt=DATE_FORMAT, format=LOG_FORMAT, handlers=handlers, level=INFO, )
     logger = getLogger()
+
+    with open(encoding='utf-8', file=SETTINGS_FILE, mode=MODE_READ, ) as settings_fp:
+        settings = load(fp=settings_fp)
+        MODEL_NAMES = settings['MODEL_NAMES']
 
     prior_filename = RESULT_FOLDER + RESULT_FILE
     if exists(path=prior_filename):
