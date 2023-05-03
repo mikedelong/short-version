@@ -1,2 +1,8 @@
 {
+  "MODEL_NAMES": [
+    "google/pegasus-arxiv",
+    "google/pegasus-newsroom",
+    "google/pegasus-pubmed",
+    "google/pegasus-xsum"
+  ]
 }
