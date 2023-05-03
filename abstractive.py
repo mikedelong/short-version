@@ -4,6 +4,7 @@ All the pegasus models are 2.28Gb
 """
 
 from glob import glob
+from json import load
 from logging import FileHandler
 from logging import INFO
 from logging import StreamHandler
@@ -15,13 +16,11 @@ from sys import stdout
 
 from arrow import now
 from pandas import DataFrame
+from pandas import concat
 from pandas import read_csv
 from pandas import set_option
 from transformers import PegasusForConditionalGeneration
 from transformers import PegasusTokenizer
-
-from pandas import concat
-from json import load
 
 DATA_FOLDER = './data/'
 DATE_FORMAT = '%Y-%m-%d %H:%M:%S'
@@ -31,7 +30,6 @@ LOG_FORMAT = '%(asctime)s.%(msecs)03d - %(levelname)s - %(name)s - %(message)s'
 LOG_PATH = Path('./logs/')
 MAX_LENGTH = 300
 MODE_READ = 'r'
-
 
 OUTPUT_FILE_NAMES = list()
 OUTPUT_MODEL_NAMES = list()
