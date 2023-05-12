@@ -87,7 +87,7 @@ if __name__ == '__main__':
                 OUTPUT_MODEL_NAMES.append(model_name)
                 OUTPUT_FILE_NAMES.append(input_file)
                 OUTPUT_SUMMARIES.append(summary_text)
-                result_filename = RESULT_FOLDER + RESULT_FILE
+                result_filename = RESULT_FOLDER.name + RESULT_FILE
                 result_df = DataFrame(
                     data={'model': OUTPUT_MODEL_NAMES, 'file': OUTPUT_FILE_NAMES, 'summary': OUTPUT_SUMMARIES})
                 result_df = concat([prior_df, result_df])
