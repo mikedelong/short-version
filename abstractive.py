@@ -22,7 +22,7 @@ from pandas import set_option
 from transformers import PegasusForConditionalGeneration
 from transformers import PegasusTokenizer
 
-DATA_FOLDER = './data/'
+DATA_FOLDER = Path('./data/')
 DATE_FORMAT = '%Y-%m-%d %H:%M:%S'
 ENCODING = 'utf-8'
 FILE_ROOT_NAME = 'abstractive'
@@ -30,19 +30,18 @@ LOG_FORMAT = '%(asctime)s.%(msecs)03d - %(levelname)s - %(name)s - %(message)s'
 LOG_PATH = Path('./logs/')
 MAX_LENGTH = 300
 MODE_READ = 'r'
-
 OUTPUT_FILE_NAMES = list()
 OUTPUT_MODEL_NAMES = list()
 OUTPUT_SUMMARIES = list()
-RESULT_FOLDER = './results/'
+RESULT_FOLDER = Path('./results/')
 RESULT_FILE = 'abstractive.csv'
 SETTINGS_FILE = './abstractive.json'
 
 if __name__ == '__main__':
     time_start = now()
     LOG_PATH.mkdir(exist_ok=True)
-    Path(DATA_FOLDER).mkdir(exist_ok=True)
-    Path(RESULT_FOLDER).mkdir(exist_ok=True)
+    DATA_FOLDER.mkdir(exist_ok=True)
+    RESULT_FOLDER.mkdir(exist_ok=True)
 
     set_option('display.max_colwidth', None)  # was -1 and caused a warning
     run_start_time = now().strftime('%Y-%m-%d_%H-%M-%S')
@@ -57,7 +56,7 @@ if __name__ == '__main__':
         settings = load(fp=settings_fp)
         MODEL_NAMES = settings['MODEL_NAMES']
 
-    prior_filename = RESULT_FOLDER + RESULT_FILE
+    prior_filename = RESULT_FOLDER.name + RESULT_FILE
     if exists(path=prior_filename):
         logger.info('reading prior results from %s', prior_filename)
         prior_df = read_csv(filepath_or_buffer=prior_filename)
@@ -65,7 +64,7 @@ if __name__ == '__main__':
     else:
         prior_df = DataFrame(columns=['model', 'file', 'summary', ])
 
-    input_files = list(glob(DATA_FOLDER + '*.txt'))
+    input_files = list(glob(DATA_FOLDER.name + '*.txt'))
     for model_name in MODEL_NAMES:
         model_df = prior_df[prior_df['model'] == model_name]
         not_done_files = {name for name in input_files if name not in model_df['file'].values}
