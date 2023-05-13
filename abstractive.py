@@ -10,6 +10,7 @@ from logging import INFO
 from logging import StreamHandler
 from logging import basicConfig
 from logging import getLogger
+from logging import Logger
 from os.path import exists
 from pathlib import Path
 from sys import stdout
@@ -21,6 +22,16 @@ from pandas import read_csv
 from pandas import set_option
 from transformers import PegasusForConditionalGeneration
 from transformers import PegasusTokenizer
+
+
+def configure_logging() -> Logger:
+    set_option('display.max_colwidth', None)  # was -1 and caused a warning
+    LOGFILE = '{}/log-{}-{}.log'.format(LOG_PATH, now().strftime('%Y-%m-%d_%H-%M-%S'), FILE_ROOT_NAME)
+
+    handlers = [FileHandler(LOGFILE), StreamHandler(stdout)]
+    # noinspection PyArgumentList
+    basicConfig(datefmt=DATE_FORMAT, format=LOG_FORMAT, handlers=handlers, level=INFO, )
+    return getLogger()
 
 DATA_FOLDER = Path('./data/')
 DATE_FORMAT = '%Y-%m-%d %H:%M:%S'
@@ -43,14 +54,7 @@ if __name__ == '__main__':
     DATA_FOLDER.mkdir(exist_ok=True)
     RESULT_FOLDER.mkdir(exist_ok=True)
 
-    set_option('display.max_colwidth', None)  # was -1 and caused a warning
-    run_start_time = now().strftime('%Y-%m-%d_%H-%M-%S')
-    LOGFILE = '{}/log-{}-{}.log'.format(LOG_PATH, run_start_time, FILE_ROOT_NAME)
-
-    handlers = [FileHandler(LOGFILE), StreamHandler(stdout)]
-    # noinspection PyArgumentList
-    basicConfig(datefmt=DATE_FORMAT, format=LOG_FORMAT, handlers=handlers, level=INFO, )
-    logger = getLogger()
+    logger = configure_logging()
 
     with open(encoding='utf-8', file=SETTINGS_FILE, mode=MODE_READ, ) as settings_fp:
         settings = load(fp=settings_fp)
