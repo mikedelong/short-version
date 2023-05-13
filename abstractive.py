@@ -33,6 +33,12 @@ def configure_logging() -> Logger:
     basicConfig(datefmt=DATE_FORMAT, format=LOG_FORMAT, handlers=handlers, level=INFO, )
     return getLogger()
 
+def get_settings() -> dict:
+    with open(encoding='utf-8', file=SETTINGS_FILE, mode=MODE_READ, ) as settings_fp:
+        result =  load(fp=settings_fp)
+
+    return result
+
 DATA_FOLDER = Path('./data/')
 DATE_FORMAT = '%Y-%m-%d %H:%M:%S'
 ENCODING = 'utf-8'
@@ -55,10 +61,9 @@ if __name__ == '__main__':
     RESULT_FOLDER.mkdir(exist_ok=True)
 
     logger = configure_logging()
+    settings = get_settings()
 
-    with open(encoding='utf-8', file=SETTINGS_FILE, mode=MODE_READ, ) as settings_fp:
-        settings = load(fp=settings_fp)
-        MODEL_NAMES = settings['MODEL_NAMES']
+    model_names = settings['MODEL_NAMES']
 
     prior_filename = RESULT_FOLDER.name + RESULT_FILE
     if exists(path=prior_filename):
@@ -69,7 +74,7 @@ if __name__ == '__main__':
         prior_df = DataFrame(columns=['model', 'file', 'summary', ])
 
     input_files = list(glob(DATA_FOLDER.name + '*.txt'))
-    for model_name in MODEL_NAMES:
+    for model_name in model_names:
         model_df = prior_df[prior_df['model'] == model_name]
         not_done_files = {name for name in input_files if name not in model_df['file'].values}
         if len(not_done_files):
