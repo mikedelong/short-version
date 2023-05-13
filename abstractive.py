@@ -33,11 +33,23 @@ def configure_logging() -> Logger:
     basicConfig(datefmt=DATE_FORMAT, format=LOG_FORMAT, handlers=handlers, level=INFO, )
     return getLogger()
 
+
+def get_prior_data(filename: str) -> DataFrame:
+    if exists(path=filename):
+        logger.info('reading prior results from %s', prior_filename)
+        result_df = read_csv(filepath_or_buffer=prior_filename)
+        logger.info('read %d results from %s', len(result_df), filename)
+    else:
+        result_df = DataFrame(columns=['model', 'file', 'summary', ])
+    return result_df
+
+
 def get_settings() -> dict:
     with open(encoding='utf-8', file=SETTINGS_FILE, mode=MODE_READ, ) as settings_fp:
-        result =  load(fp=settings_fp)
+        result = load(fp=settings_fp)
 
     return result
+
 
 DATA_FOLDER = Path('./data/')
 DATE_FORMAT = '%Y-%m-%d %H:%M:%S'
@@ -66,12 +78,7 @@ if __name__ == '__main__':
     model_names = settings['MODEL_NAMES']
 
     prior_filename = RESULT_FOLDER.name + RESULT_FILE
-    if exists(path=prior_filename):
-        logger.info('reading prior results from %s', prior_filename)
-        prior_df = read_csv(filepath_or_buffer=prior_filename)
-        logger.info('read %d results from %s', len(prior_df), prior_filename)
-    else:
-        prior_df = DataFrame(columns=['model', 'file', 'summary', ])
+    prior_df = get_prior_data(filename=prior_filename)
 
     input_files = list(glob(DATA_FOLDER.name + '*.txt'))
     for model_name in model_names:
