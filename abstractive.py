@@ -74,9 +74,9 @@ if __name__ == '__main__':
 
     logger = configure_logging()
     settings = get_settings()
-
-    model_names = settings['MODEL_NAMES']
-
+    model_names = settings['MODEL_NAMES'] if 'MODEL_NAMES' in settings.keys() else None
+    if not model_names:
+        logger.error(msg='Model name is missing from settings.')
     prior_filename = RESULT_FOLDER.name + RESULT_FILE
     prior_df = get_prior_data(filename=prior_filename)
 
