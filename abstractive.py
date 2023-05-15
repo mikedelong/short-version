@@ -7,10 +7,10 @@ from glob import glob
 from json import load
 from logging import FileHandler
 from logging import INFO
+from logging import Logger
 from logging import StreamHandler
 from logging import basicConfig
 from logging import getLogger
-from logging import Logger
 from os.path import exists
 from pathlib import Path
 from sys import stdout
