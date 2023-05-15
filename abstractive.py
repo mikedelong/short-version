@@ -26,9 +26,9 @@ from transformers import PegasusTokenizer
 
 def configure_logging() -> Logger:
     set_option('display.max_colwidth', None)  # was -1 and caused a warning
-    LOGFILE = '{}/log-{}-{}.log'.format(LOG_PATH, now().strftime('%Y-%m-%d_%H-%M-%S'), FILE_ROOT_NAME)
+    logfile = '{}/log-{}-{}.log'.format(LOG_PATH, now().strftime('%Y-%m-%d_%H-%M-%S'), FILE_ROOT_NAME)
 
-    handlers = [FileHandler(LOGFILE), StreamHandler(stdout)]
+    handlers = [FileHandler(logfile), StreamHandler(stdout)]
     # noinspection PyArgumentList
     basicConfig(datefmt=DATE_FORMAT, format=LOG_FORMAT, handlers=handlers, level=INFO, )
     return getLogger()
@@ -36,8 +36,8 @@ def configure_logging() -> Logger:
 
 def get_prior_data(filename: str) -> DataFrame:
     if exists(path=filename):
-        logger.info('reading prior results from %s', prior_filename)
-        result_df = read_csv(filepath_or_buffer=prior_filename)
+        logger.info('reading prior results from %s', filename)
+        result_df = read_csv(filepath_or_buffer=filename)
         logger.info('read %d results from %s', len(result_df), filename)
     else:
         result_df = DataFrame(columns=['model', 'file', 'summary', ])
@@ -51,28 +51,12 @@ def get_settings() -> dict:
     return result
 
 
-DATA_FOLDER = Path('./data/')
-DATE_FORMAT = '%Y-%m-%d %H:%M:%S'
-ENCODING = 'utf-8'
-FILE_ROOT_NAME = 'abstractive'
-LOG_FORMAT = '%(asctime)s.%(msecs)03d - %(levelname)s - %(name)s - %(message)s'
-LOG_PATH = Path('./logs/')
-MAX_LENGTH = 300
-MODE_READ = 'r'
-OUTPUT_FILE_NAMES = list()
-OUTPUT_MODEL_NAMES = list()
-OUTPUT_SUMMARIES = list()
-RESULT_FOLDER = Path('./results/')
-RESULT_FILE = 'abstractive.csv'
-SETTINGS_FILE = './abstractive.json'
-
-if __name__ == '__main__':
+def main():
     time_start = now()
     LOG_PATH.mkdir(exist_ok=True)
     DATA_FOLDER.mkdir(exist_ok=True)
     RESULT_FOLDER.mkdir(exist_ok=True)
 
-    logger = configure_logging()
     settings = get_settings()
     model_names = settings['MODEL_NAMES'] if 'MODEL_NAMES' in settings.keys() else None
     if not model_names:
@@ -111,3 +95,27 @@ if __name__ == '__main__':
                 result_df.to_csv(index=False, path_or_buf=result_filename, )
 
     logger.info('total time: {:5.2f}s'.format((now() - time_start).total_seconds()))
+
+
+DATA_FOLDER = Path('./data/')
+DATE_FORMAT = '%Y-%m-%d %H:%M:%S'
+ENCODING = 'utf-8'
+FILE_ROOT_NAME = 'abstractive'
+LOG_FORMAT = '%(asctime)s.%(msecs)03d - %(levelname)s - %(name)s - %(message)s'
+LOG_PATH = Path('./logs/')
+MAX_LENGTH = 300
+MODE_READ = 'r'
+OUTPUT_FILE_NAMES = list()
+OUTPUT_MODEL_NAMES = list()
+OUTPUT_SUMMARIES = list()
+RESULT_FOLDER = Path('./results/')
+RESULT_FILE = 'abstractive.csv'
+SETTINGS_FILE = './abstractive.json'
+
+logger = configure_logging()
+
+if __name__ == '__main__':
+    try:
+        main()
+    except Exception as exception:
+        logger.error(exc_info=True, msg='error:')
